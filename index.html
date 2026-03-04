@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudioBook - Podcast & Reels Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+    <nav class="p-6 border-b border-gray-800 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-red-500 underline">STUDIO_BOOK</h1>
+        <div class="space-x-6">
+            <a href="#" class="hover:text-red-400">Home</a>
+            <a href="#booking" class="bg-red-600 px-4 py-2 rounded">Book Now</a>
+        </div>
+    </nav>
+
+    <header class="py-20 text-center px-4">
+        <h2 class="text-5xl font-extrabold mb-4">Record Your Masterpiece.</h2>
+        <p class="text-gray-400 text-xl max-w-2xl mx-auto">High-end podcast setups and reel shoot areas ready for your content. Professional lighting and audio included.</p>
+    </header>
+
+    <section id="booking" class="max-w-4xl mx-auto p-6 bg-gray-800 rounded-xl shadow-2xl mb-20">
+        <h3 class="text-2xl font-bold mb-6">Choose Your Slot</h3>
+        
+        <div id="slot-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <p class="text-gray-500 italic">Loading available slots...</p>
+        </div>
+
+        <form id="bookingForm" class="space-y-4 border-t border-gray-700 pt-8">
+            <input type="hidden" id="selectedSlotId" required>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="username" placeholder="Full Name" class="bg-gray-700 p-3 rounded border border-gray-600 focus:outline-none focus:border-red-500" required>
+                <input type="tel" id="phone" placeholder="WhatsApp Number (e.g. +91...)" class="bg-gray-700 p-3 rounded border border-gray-600 focus:outline-none focus:border-red-500" required>
+            </div>
+
+            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-lg transition duration-300">
+                Confirm Booking & Pay
+            </button>
+        </form>
+    </section>
+
+    <script>
+        const slotContainer = document.getElementById('slot-container');
+        const slotInput = document.getElementById('selectedSlotId');
+
+        // 1. Fetch Slots from Backend
+        async function fetchSlots() {
+            try {
+                const response = await fetch('http://localhost:3000/slots');
+                const slots = await response.json();
+                
+                slotContainer.innerHTML = ''; // Clear loading text
+                
+                slots.forEach(slot => {
+                    const btn = document.createElement('button');
+                    btn.innerText = new Date(slot.start_time).toLocaleString();
+                    btn.className = "p-3 border border-gray-600 rounded hover:bg-red-500 transition slot-btn";
+                    btn.onclick = () => selectSlot(slot.id, btn);
+                    slotContainer.appendChild(btn);
+                });
+            } catch (err) {
+                slotContainer.innerHTML = '<p class="text-red-400">Error loading slots.</p>';
+            }
+        }
+
+        // 2. Handle Slot Selection
+        function selectSlot(id, element) {
+            document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('bg-red-600', 'border-white'));
+            element.classList.add('bg-red-600', 'border-white');
+            slotInput.value = id;
+        }
+
+        // 3. Submit Booking
+        document.getElementById('bookingForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const data = {
+                userId: 1, // Placeholder until you add user session logic
+                slotId: slotInput.value,
+                phone: document.getElementById('phone').value
+            };
+
+            const response = await fetch('http://localhost:3000/book', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            fetchSlots(); // Refresh slots
+        };
+
+        fetchSlots();
+    </script>
+</body>
+</html>
