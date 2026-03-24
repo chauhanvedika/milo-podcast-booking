@@ -30,3 +30,15 @@ jobs:
 
       - name: Push Frontend
         run: docker push vedika20chauhan/milo-frontend
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            docker pull vedika20chauhan/milo-backend
+            docker pull vedika20chauhan/milo-frontend
+            docker-compose down
+            docker-compose up -d
