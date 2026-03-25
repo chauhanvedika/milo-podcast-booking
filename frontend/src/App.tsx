@@ -1,32 +1,21 @@
-import { BrowserRouter,Routes,Route } from "react-router-dom";
-
+import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Podcast from "./pages/Podcast";
 
-function App(){
-
-return(
-
-<BrowserRouter>
-
-<Routes>
-
-<Route path="/" element={<Home/>}/>
-
-<Route path="/login" element={<Login/>}/>
-
-<Route path="/signup" element={<Signup/>}/>
-
-<Route path="/podcast" element={<Podcast/>}/>
-
-</Routes>
-
-</BrowserRouter>
-
-)
-
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/podcast" element={<Podcast />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
