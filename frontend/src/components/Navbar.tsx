@@ -1,16 +1,21 @@
-import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function Navbar() {
   return (
-    <div className="navbar">
-      <h2>MILO</h2>
+    <div className="flex justify-between items-center px-10 py-5 bg-[#0f2e2e] text-white">
+      
+      {/* LOGO */}
+      <h1 className="text-2xl font-bold tracking-wide text-yellow-400">
+        MILO
+      </h1>
 
-      <div>
-        <Link to="/">Home</Link>
-        <Link to="/podcast">Podcast</Link>
-        <Link to="/login">Login</Link>
-        <Link to="/signup">Signup</Link>
+      {/* MENU */}
+      <div className="flex gap-8 text-lg">
+        <a href="/" className="hover:text-yellow-400">Home</a>
+        <a href="/podcast" className="hover:text-yellow-400">Podcast</a>
+        <a href="/login" className="hover:text-yellow-400">Login</a>
       </div>
+
     </div>
   );
 }
